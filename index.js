@@ -1,61 +1,37 @@
-require('dotenv').config(); // add .env variables
-var couchbase = require('couchbase'); // setup couchbase SDK
+require('dotenv').config(); // Add .env variables
+var couchbase = require('couchbase'); // Setup Couchbase SDK
 
 async function main() {
     const clusterConnStr = process.env.NODE_COUCHBASE_CONNECTION_STRING;
     const username = process.env.NODE_COUCHBASE_USERNAME;
     const password = process.env.NODE_COUCHBASE_PASSWORD;
-    const bucketName = process.env.COUCHBASE_DEFAULT_BUCKET
+    const bucketName = process.env.COUCHBASE_DEFAULT_BUCKET;
 
     const cluster = await couchbase.connect(clusterConnStr, {
         username: username,
         password: password,
-        // Sets a pre-configured profile called "wanDevelopment" to help avoid latency issues
-        // when accessing Capella from a different Wide Area Network
-        // or Availability Zone (e.g. your laptop).
         configProfile: 'wanDevelopment',
-    })
+    });
 
-    const bucket = cluster.bucket(bucketName)
+    const bucket = cluster.bucket(bucketName);
 
-    // Get a reference to the default collection, required only for older Couchbase server versions
-    const defaultCollection = bucket.defaultCollection()
+    console.log('Connected to Couchbase cluster:', clusterConnStr);
+    console.log(`Couchbase Cluster object instantiated successfully: ${cluster}`);
+    console.log(`Couchbase Bucket object instantiated successfully: ${bucket}`);
 
-    const collection = bucket.scope('tenant_agent_00').collection('users')
-
-    const user = {
-        type: 'user',
-        name: 'Michael',
-        email: 'michael123@test.com',
-        interests: ['Swimming', 'Rowing'],
-    }
-
-    // Create and store a document
-    await collection.upsert('michael123', user)
-
-    // Load the Document and print it
-    // Prints Content and Metadata of the stored Document
-    let getResult = await collection.get('michael123')
-    console.log('Get Result: ', getResult)
-
-    // Perform a SQL++ (N1QL) Query
-    const queryResult = await bucket
-        .scope('inventory')
-        .query('SELECT name FROM `airline` WHERE country=$1 LIMIT 10', {
-            parameters: ['United States'],
-        })
-    console.log('Query Results:')
-    queryResult.rows.forEach((row) => {
-        console.log(row)
-    })
+    // Return a success message or a status for testing
+    return { status: 'connected', bucketName };
 }
 
-// Run the main function
-main()
-    .catch((err) => {
-        console.log('ERR:', err)
-        process.exit(1)
-    })
-    .then(process.exit)
-
+// Export the main function for testing
 module.exports = main;
+
+// Run the main function if this is the entry point
+if (require.main === module) {
+    main()
+        .catch((err) => {
+            console.error('ERR:', err);
+            process.exit(1);
+        })
+        .then(() => process.exit());
+}

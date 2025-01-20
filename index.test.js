@@ -1,5 +1,6 @@
 const main = require('./index');
 
-test('runs main', async () => {
-    expect(await main()).toBe(undefined)
+test('verifies main connects successfully', async () => {
+    const result = await main();
+    expect(result).toEqual({ status: 'connected', bucketName: process.env.COUCHBASE_DEFAULT_BUCKET });
 });

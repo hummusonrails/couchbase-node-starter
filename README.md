@@ -41,7 +41,7 @@ You will also need an account on Couchbase Capella to create a cluster and obtai
 **Clone the repository**
 
 ```bash
-git clone https://github.com/codercatdev/couchbase-node-starter.git
+git clone https://github.com/couchbase-starter-kit/couchbase-node-starter.git
 cd URL
 ```
 
@@ -96,6 +96,8 @@ npm run start
 This will start the [Node.js] server, and the command will run automatically showing the results in the command line.
 
 ### Contributing
+
+**Thank you to [Codercatdev](https://github.com/codercatdev) for creating this starter kit and contributing to the Couchbase Node.js community!**
 
 Contributions are more than welcome! If you encounter any bugs or issues with the application, please open an issue on the GitHub repository. If you would like to contribute code, feel free to open a pull request with your changes. All contributors are expected to follow the [Code of Conduct](CODE_OF_CONDUCT.md).
 
